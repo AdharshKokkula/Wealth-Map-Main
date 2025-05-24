@@ -1,0 +1,87 @@
+We will build Wealth Map, a corporate platform enabling employees to explore US property ownership and wealth data via an interactive map. The prototype will feature secure user authentication, company administration, a responsive map with property markers, detailed property and owner information, and robust search/filtering, all powered by APIs. Our vision is to deliver a performant (map rendering <1s, page loads <2s), user-friendly, and secure solution that meets must-have requirements while using a lightweight optimized tech stack. We prioritize simplicity, free tools, and performance to excel in technical implementation, UX, feature completeness, and business viability.
+Tech Stack
+Front-End: Vite + React.js, MapLibre GL JS, Tailwind CSS
+Why: Vite ensures fast builds for rapid iteration. React.js supports reusable components for map and UI. MapLibre provides free, high-performance mapping. Tailwind accelerates responsive design.
+Back-End: Node.js + Express.js
+Why: Lightweight and fast for REST APIs, ideal for small teams integrating free APIs.
+Database: PostgreSQL + PostGIS, Redis
+Why: PostGIS handles geospatial queries for mapping. Redis caches data for sub-500ms performance.
+Authentication: Clerk
+Why: Simplifies OAuth 2.0, MFA, and role-based access, saving development time.
+APIs (Free):
+OpenStreetMap (Overpass API): Mapping and location data.
+Nominatim: Geocoding for property coordinates.
+Data.gov/County Open Data: Property details (address, value, ownership).
+Census Bureau API: Wealth proxies (income by ZIP code).
+OpenCorporates API (free tier): Corporate owner data.
+Algolia (free tier): Search and filtering.
+Hosting: Vercel (front-end, serverless APIs), Render (back-end, PostgreSQL)
+Why: Free tiers enable rapid deployment and scalability for prototypes.
+Security: Helmet.js, Prisma (ORM)
+Why: Ensures secure APIs and encrypted data storage.
+Monitoring: Sentry (free tier)
+Why: Tracks errors and performance (e.g., map rendering <1s).
+Version Control: GitHub + GitHub Actions
+Why: Automated testing and deployment, ensuring code quality.
+Why This Stack?
+Vite and Express.js reduce setup time, Clerk simplifies authentication, and free APIs (OpenStreetMap, Census, etc.) approximate paid API functionality (e.g., Zillow, Wealth Engine). MapLibre and Redis ensure performance (500+ concurrent users), while Tailwind delivers polished UX, positioning us to score high across all judging criteria.
+Detailed List of Features and Implementation
+1. User Authentication & Authorization
+Description: Secure login for admins (manage accounts) and employees (view data) with role-based access.
+Implementation:
+Clerk handles OAuth 2.0, MFA, and roles (admin/employee).
+React.js login form (email, password) with Clerk integration.
+Store user roles in PostgreSQL ({ user_id, role: "admin" | "employee" }).
+Why: Must-have for secure access. Clerk’s free tier minimizes development effort.
+2. Company Registration & Administration
+Description: Admins register companies, invite employees, and manage permissions.
+Implementation:
+React.js form for company registration (name, logo upload), stored in PostgreSQL.
+Clerk API for email invites and permission levels (view-only vs. edit).
+Basic admin dashboard (React.js + Tailwind) to list employees and revoke access.
+Skip advanced stats due to time constraints, focusing on core admin tasks.
+Why: Must-have for corporate control.
+3. Employee Onboarding
+Description: Employees set up accounts and accept terms.
+Implementation:
+Clerk sends email invites with setup links.
+React.js form enforces secure passwords (8+ characters).
+MFA via Clerk (email codes).
+Static terms of service page with acceptance checkbox.
+Skip tutorial to save time, relying on intuitive UX.
+Why: Must-have for user setup. Streamlined to focus on essentials.
+4. Interactive Property Map
+Description: US map with property markers, zoom/pan, and clustering.
+Implementation:
+MapLibre GL JS renders OpenStreetMap tiles for a responsive map.
+Fetch property coordinates from PostgreSQL (PostGIS) using Nominatim for geocoding.
+Implement zoom/pan with MapLibre controls; use standard view only (skip satellite to save time).
+Cluster markers at low zoom levels using MapLibre’s clustering plugin.
+Cache map tiles in Redis (Upstash) for <1s rendering.
+Why: Must-have for core functionality. Clustering and caching meet performance goals.
+5. Property Information Display
+Description: Show property details (address, size, value, ownership).
+Implementation:
+React.js property card (Tailwind) displays on map click, fetching data from PostgreSQL.
+Source data from Data.gov/county datasets (pre-loaded) for address, size, ownership.
+Use Census API for basic owner data (e.g., ZIP code income as wealth proxy).
+Bookmark feature stores Property IDs in PostgreSQL ({ user_id, property_id }).
+Why: Must-have for property exploration. Bookmarks enhance UX within limited scope.
+7. Search & Filtering
+Description: Search by address; filter by value and size.
+Implementation:
+Algolia indexes property data (address, value, size) for fast search.
+React.js search bar with Algolia’s auto-suggestions (e.g., “123 Main St”).
+Filters (value, size) via Tailwind dropdowns, querying Algolia.
+Skip saved filters and net worth filtering to save time.
+Results update dynamically on map (MapLibre) and list view (React.js).
+Why: Must-have for usability. Algolia’s free tier delivers fast search, boosting UX.
+7. Data Security & Privacy
+Description: Encrypt data and ensure compliance.
+Implementation:
+Prisma encrypts user and bookmark data in PostgreSQL.
+Helmet.js secures Express.js APIs with HTTP headers.
+Clerk handles GDPR/CCPA-compliant authentication.
+Sentry monitors for breaches (target: zero breaches).
+Skip access logging to reduce scope.
+Why: Must-have for trust and compliance, critical for business viability.
