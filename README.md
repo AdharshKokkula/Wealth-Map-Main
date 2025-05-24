@@ -68,7 +68,7 @@ Wealth Mapper is a powerful corporate platform that enables employees to explore
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/AdharshKokkula/Wealth-Map-Main
 cd wealth-mapper
 ```
 
